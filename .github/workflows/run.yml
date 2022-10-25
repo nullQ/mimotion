@@ -1,39 +1,48 @@
 name: mi
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  #push:
+  #  branches: [ main ]
+  #pull_request:
+  #  branches: [ main ]
   schedule:
-    - cron: 23 0 * * *
+    - cron: '3 0,2,5,7,9,11,13 * * *'
   watch:
     types: started
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    #if: github.event.repository.owner.id == github.event.sender.id
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - uses: actions/checkout@v2
-    - name: 初始化Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
-    - name: 开始
-      run: |
-        pip install requests
+      - name: Checkout codes
+        uses: actions/checkout@v2
+      - name: Update system and install zsh
+        run: |
+          sudo -E apt-get -qq update
+          sudo -E apt-get install zsh -y
+          
+      - name: 初始化Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          
+      - name: 开始
+        run: |
+        pip3 install requests
         pmode='${{ secrets.PMODE }}'
         pkey='${{ secrets.PKEY }}'
         user='${{ secrets.USER }}'
         pwd='${{ secrets.PWD }}'
         step='${{ secrets.STEP }}'
         
-        python3 main.py <<EOF
-        ${pmode}
-        ${pkey}
-        ${user}
-        ${pwd}
-        ${step}
-        EOF
+												
+										  
+										
+										  
+									  
+															
+									
+        python3 main.py ${pmode} ${pkey}${user} ${pwd} ${step}
